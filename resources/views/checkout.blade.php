@@ -71,6 +71,7 @@
 
     <form id="checkout-form">
         @csrf
+        <input type="hidden" name="mode" value="{{ $mode ?? '' }}">
         <input type="hidden" name="address_type" id="input_address_type" value="{{ session('address') ? 'profile' : 'map' }}">
         <input type="hidden" name="map_lat" id="input_map_lat" value="">
         <input type="hidden" name="map_lng" id="input_map_lng" value="">

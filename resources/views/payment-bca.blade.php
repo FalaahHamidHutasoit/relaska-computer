@@ -34,7 +34,7 @@
             <div class="payment-card mb-4">
                 <div class="text-center mb-4">
                     <p class="text-muted small mb-1">Total Tagihan</p>
-                    <h2 class="total-amount">Rp {{ number_format($total_bayar ?? 0, 0, ',', '.') }}</h2>
+                    <h2 class="total-amount">Rp {{ number_format($order->total_price, 0, ',', '.') }}</h2>
                     <span class="badge bg-warning text-dark px-3 py-2 rounded-pill small">Menunggu Pembayaran</span>
                 </div>
 
@@ -98,8 +98,15 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({ title: 'Memproses...', didOpen: () => { Swal.showLoading() } });
+                // Sisipkan order_id dan ubah headers
                 fetch('{{ url("cart/confirmPayment") }}', {
-                    method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+                    method: 'POST', 
+                    body: JSON.stringify({ order_id: {{ $order->id }} }), // Kirim ID Pesanan
+                    headers: { 
+                        'Content-Type': 'application/json', // Tambahkan ini
+                        'X-Requested-With': 'XMLHttpRequest', 
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}' 
+                    }
                 })
                 .then(res => res.json())
                 .then(data => {

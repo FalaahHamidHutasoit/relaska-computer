@@ -145,44 +145,107 @@ class CartController extends Controller
     }
 
     // Menampilkan Halaman Pembayaran BCA
-    public function paymentBCA(Request $request)
+    public function paymentBCA($id = null)
     {
-        // Kita cek apakah user datang dari jalur VIP (Beli Sekarang) atau Keranjang Biasa
-        $mode = $request->query('mode');
-        
+        $username = session('username');
+        $user = \Illuminate\Support\Facades\DB::table('users')->where('username', $username)->first();
+
+        if (!$user) return redirect('/')->with('error', 'Silakan login terlebih dahulu.');
+
+        if ($id) {
+            // Jika user ngeklik "Lanjut Bayar" dari tabel Pesanan Saya
+            $order = \Illuminate\Support\Facades\DB::table('builds')
+                ->where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+        } else {
+            // Jika user baru aja checkout (Otomatis ambil tagihan terbaru)
+            $order = \Illuminate\Support\Facades\DB::table('builds')
+                ->where('user_id', $user->id)
+                ->where('status', 'draft')
+                ->orderBy('id', 'desc')
+                ->first();
+        }
+
+        if (!$order) return redirect('/')->with('msg', 'Transaksi tidak ditemukan.');
+
+        return view('payment-bca', compact('order'));
+    }
+
+    // Memproses data form checkout
+    // Memproses data form checkout
+    public function process(Request $request)
+    {
+        // 1. Ambil data user yang sedang login
+        $username = session('username');
+        $user = \Illuminate\Support\Facades\DB::table('users')->where('username', $username)->first();
+
+        if (!$user) {
+            return response()->json(['status' => 'error', 'message' => 'Sesi login tidak valid.']);
+        }
+
+        // 2. Tentukan Keranjang Mana yang Diproses (Keranjang Biasa vs Beli Sekarang)
+        $mode = $request->input('mode');
         if ($mode === 'buynow') {
             $cart = session()->get('buy_now_cart', []);
         } else {
             $cart = session()->get('cart', []);
         }
 
-        // Jika tidak ada transaksi aktif, kembalikan ke halaman utama
         if (empty($cart)) {
-            return redirect('/')->with('msg', 'Tidak ada transaksi yang perlu dibayar.');
+            return response()->json(['status' => 'error', 'message' => 'Keranjang kosong.']);
         }
 
-        // Ambil detail produk untuk menghitung total nominal yang harus dibayar di halaman BCA
+        // 3. Kalkulasi Total Harga Murni dari Database
         $productIds = array_keys($cart);
-        $products = \Illuminate\Support\Facades\DB::table('products')
-                    ->whereIn('id', $productIds)
-                    ->get()
-                    ->keyBy('id');
+        $products = \Illuminate\Support\Facades\DB::table('products')->whereIn('id', $productIds)->get()->keyBy('id');
 
-        // Lempar data ke view payment-bca
-        return view('payment-bca', compact('cart', 'products', 'mode'));
-    }
+        $total_price = 0;
+        foreach ($cart as $id => $details) {
+            if (isset($products[$id])) {
+                $total_price += $products[$id]->price * $details['quantity'];
+            }
+        } // <-- FOREACH DITUTUP DI SINI
 
-    // Memproses data form checkout
-    public function process(Request $request)
-    {
-        // Sebagai Backend Developer sejati, nanti di dalam fungsi ini kamu bakal:
-        // 1. Validasi alamat pengiriman
-        // 2. Simpan data ke tabel `builds`
-        // 3. Simpan detail produk ke tabel `build_items`
-        // 4. Hapus memori session keranjang
-        
-        // Tapi untuk sekarang, kita paksa balas "sukses" agar JavaScript 
-        // bisa melompat ke halaman BCA!
+        // BIKIN LOGIC NAMA PESANAN PINTAR
+        $firstProductId = array_key_first($cart);
+        $firstProductName = isset($products[$firstProductId]) ? $products[$firstProductId]->name : 'Komponen PC';
+
+        if (count($cart) == 1) {
+            $orderName = $firstProductName;
+        } else {
+            $orderName = $firstProductName . ' + ' . (count($cart) - 1) . ' item lainnya';
+        }
+
+        // Tambahkan ongkir tetap dan biaya layanan
+        $total_price += 35000 + 2000;
+
+        // 4. Simpan ke tabel `builds` (Sebagai Struk Utama/Header)
+        $build_id = \Illuminate\Support\Facades\DB::table('builds')->insertGetId([
+            'user_id'     => $user->id,
+            'name'        => $orderName, // <-- SEKARANG MENGGUNAKAN VARIABEL NAMA PINTAR
+            'total_price' => $total_price,
+            'status'      => 'draft',
+            'type'        => 'order',
+            'created_at'  => now(),
+            'updated_at'  => now()
+        ]);
+
+        // 5. Simpan ke tabel `build_items` (Sebagai Rincian Barang)
+        $buildItemsData = [];
+        foreach ($cart as $id => $details) {
+            if (isset($products[$id])) {
+                $buildItemsData[] = [
+                    'build_id'          => $build_id,
+                    'product_id'        => $id,
+                    'quantity'          => $details['quantity'],
+                    'price_at_purchase' => $products[$id]->price
+                ];
+            }
+        }
+        \Illuminate\Support\Facades\DB::table('build_items')->insert($buildItemsData);
+
+        // 6. Kembalikan respon sukses
         return response()->json([
             'status' => 'success',
             'message' => 'Pesanan berhasil diamankan.'
@@ -190,19 +253,25 @@ class CartController extends Controller
     }
 
     // Fungsi untuk mengonfirmasi pembayaran
-    public function confirmPayment(Request $request)
+    public function confirmPayment(\Illuminate\Http\Request $request)
     {
-        // Sebagai Backend Dev, nanti di sini kamu bikin query buat:
-        // Update status transaksi di database dari 'Pending' menjadi 'Menunggu Verifikasi'
+        $username = session('username');
+        $user = \Illuminate\Support\Facades\DB::table('users')->where('username', $username)->first();
+        
+        // Tangkap ID yang dikirim dari JS
+        $order_id = $request->input('order_id'); 
 
-        // Karena pesanan sudah dibayar/dikonfirmasi, kita kosongkan keranjangnya
+        if ($user && $order_id) {
+            // HANYA update pesanan dengan ID yang dibayar ini saja
+            \Illuminate\Support\Facades\DB::table('builds')
+                ->where('id', $order_id)
+                ->where('user_id', $user->id)
+                ->update(['status' => 'waiting_approval']);
+        }
+
         session()->forget('cart');
         session()->forget('buy_now_cart');
 
-        // Balas ke frontend (SweetAlert) bahwa proses sukses
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Pembayaran berhasil dikonfirmasi'
-        ]);
+        return response()->json(['status' => 'success']);
     }
 }

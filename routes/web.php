@@ -30,7 +30,8 @@ Route::get('/register', function () { return view('register'); });
 // Rute E-Commerce (Cart, Checkout, Payment)
 Route::get('/cart', [CartController::class, 'index']);
 Route::get('/checkout', [CartController::class, 'checkout']);
-Route::get('/payment/bca', [CartController::class, 'paymentBCA']);
+// Ganti rute payment bca yang lama jadi ini:
+Route::get('/payment/bca/{id?}', [App\Http\Controllers\CartController::class, 'paymentBca']);
 
 Route::post('/cart/add', [CartController::class, 'add']);
 // Rute untuk memproses kuantitas dan hapus item keranjang via AJAX
@@ -48,3 +49,5 @@ Route::post('/cart/confirmPayment', [CartController::class, 'confirmPayment']);
 // Cari rute /dashboard sementara kemarin, ganti jadi ini:
 Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::get('/dashboard/pesanan', [DashboardController::class, 'pesanan']);
+// Rute untuk menerima lemparan data form edit profil dan upload foto
+Route::post('/dashboard/updateProfile', [App\Http\Controllers\DashboardController::class, 'updateProfile']);

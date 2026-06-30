@@ -11,36 +11,6 @@
 
 @section('content')
 
-@php
-    // SIMULASI DATA BACKEND: Anggap saja ini data yang dilempar dari Database/Controller
-    $orders = [
-        (object)[
-            'id' => 1,
-            'transaction_id' => 'RLK-260682',
-            'created_at' => '2026-06-28 10:30:00',
-            'status' => 'draft',
-            'total_price' => 4500000,
-            'type' => 'build'
-        ],
-        (object)[
-            'id' => 2,
-            'transaction_id' => 'RLK-260599',
-            'created_at' => '2026-06-25 14:15:00',
-            'status' => 'pending',
-            'total_price' => 1250000,
-            'type' => 'part'
-        ],
-        (object)[
-            'id' => 3,
-            'transaction_id' => 'RLK-260102',
-            'created_at' => '2026-06-20 09:00:00',
-            'status' => 'completed',
-            'total_price' => 320000,
-            'type' => 'part'
-        ]
-    ];
-@endphp
-
 <div class="container page-container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -58,7 +28,7 @@
                 <table class="table table-hover mb-0 align-middle">
                     <thead class="bg-light">
                         <tr>
-                            <th class="p-3 text-secondary">ID Transaksi & Waktu</th>
+                            <th class="p-3 text-secondary">Item Pesanan & Waktu</th>
                             <th class="p-3 text-secondary">Status</th>
                             <th class="p-3 text-secondary">Total Harga</th>
                             <th class="p-3 text-end text-secondary">Aksi</th>
@@ -68,7 +38,7 @@
                         @forelse($orders as $o)
                         <tr>
                             <td class="p-3">
-                                <div class="fw-bold text-dark">{{ $o->transaction_id ?? 'TRX-'.$o->id }}</div>
+                                <div class="fw-bold text-dark">{{ $o->name }}</div>
                                 <small class="text-muted">{{ date('d M Y, H:i', strtotime($o->created_at)) }}</small>
                             </td>
                             
@@ -90,7 +60,7 @@
 
                             <td class="text-end p-3">
                                 @if($o->status == 'draft')
-                                    <a href="{{ url('payment/bca') }}" class="btn btn-sm btn-warning text-dark rounded-pill px-3 fw-bold">Lanjut Bayar</a>
+                                    <a href="{{ url('payment/bca/' . $o->id) }}"class="btn btn-sm btn-warning text-dark rounded-pill px-3 fw-bold">Lanjut Bayar</a>
                                     <button class="btn btn-sm btn-light border text-danger rounded-pill px-3 ms-1" onclick="return confirm('Batalkan pesanan ini?')">
                                         <i class="bi bi-x-lg"></i>
                                     </button>

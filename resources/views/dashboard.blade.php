@@ -2,30 +2,6 @@
 
 @section('title', 'Dashboard Profil - RELASKA')
 
-@section('navbar')
-<div class="navbar-top" style="padding: 15px 0; border-bottom: 1px solid #eee; background: white;">
-    <div class="container d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center gap-3">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                <img src="{{ asset('assets/img/logo_relaska.svg') }}" alt="RELASKA" style="height: 40px;" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/a/ab/Android_O_Preview_Logo.png'">
-            </a>
-            <a href="{{ url('/') }}" class="btn btn-sm btn-outline-dark rounded-pill px-3 fw-bold small border-2">
-                <i class="bi bi-arrow-left me-1"></i> KEMBALI KE BERANDA
-            </a>
-        </div>
-        <div class="search-container mx-4" style="position: relative; max-width: 600px; width: 100%;">
-            <input type="text" class="search-input" placeholder="Cari apa hari ini?" style="font-family: 'Montserrat', sans-serif; border: 1px solid #2d3436; border-radius: 5px; padding: 8px 15px; width: 100%;">
-            <button class="search-btn" style="position: absolute; right: 0; top: 0; height: 100%; width: 50px; background: #1e1e1e; border: 2px solid; border-image: linear-gradient(45deg, #f093fb, #4facfe) 1; color: white; display: flex; align-items: center; justify-content: center; border-radius: 0 5px 5px 0;"><i class="bi bi-search"></i></button>
-        </div>
-        <div class="d-flex align-items-center gap-4">
-            <a href="{{ url('dashboard') }}" class="text-decoration-none text-dark fw-bold small">
-                <i class="bi bi-person-circle me-1"></i> {{ session('username', 'User') }}
-            </a>
-        </div>
-    </div>
-</div>
-@endsection
-
 @section('styles')
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
 <style>
@@ -44,13 +20,6 @@
     .camera-icon-btn { position: absolute; top: 80px; left: 115px; background: #004e92; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; z-index: 11; font-size: 0.9rem; box-shadow: 0 4px 8px rgba(0,0,0,0.15); cursor: pointer; transition: 0.2s; }
     .camera-icon-btn:hover { transform: scale(1.1); background: #003366; }
 
-    .tier-banner-pink { background-image: url('{{ asset('assets/img/6144273 1.png') }}'); background-color: #D72C84; background-size: cover; border-radius: 20px; padding: 15px 15px 15px 190px; color: white; position: relative; top: 10px; min-height: 130px; margin-left: -15px; margin-right: -15px; width: calc(100% + 30px); box-shadow: 0 5px 15px rgba(168, 85, 247, 0.2); display: flex; flex-direction: column; justify-content: center; }
-    .tier-badge-icon-img { position: absolute; top: -55px; right: 0px; width: 85px; filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2)); }
-    .tier-progress-container { margin-top: 10px; position: relative; }
-    .tier-progress-bg { background: rgba(255, 255, 255, 0.3); height: 6px; border-radius: 3px; }
-    .tier-progress-fill { background: #fff; width: 10%; height: 100%; border-radius: 3px; position: relative; }
-    .progress-labels { display: flex; justify-content: space-between; font-size: 0.7rem; margin-top: 5px; font-weight: 600; opacity: 0.8; }
-    
     .location-badge-pill { background-color: #cce5ff; color: #004085; display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; margin-bottom: 15px; }
     .user-detail-list .list-group-item { border: none; padding: 10px 0; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
     .label-text { font-size: 0.85rem; color: #888; font-weight: 500; display: block; margin-bottom: 4px; }
@@ -81,34 +50,14 @@
 
 @section('content')
 
-@php
-    // SIMULASI DATA BACKEND (Biar view tidak error sebelum di-hook ke Controller dan Database)
-    $username = session('username', 'User');
-    $user = [
-        'username' => $username,
-        'fullname' => session('fullname', $username),
-        'phone' => '',
-        'gender' => '',
-        'dob' => '',
-        'address' => '',
-        'profile_pic' => ''
-    ];
-    $isDataLengkap = !empty($user['phone']) && !empty($user['gender']) && !empty($user['dob']) && !empty($user['address']);
-    
-    $total_belanjaan = 0;
-    $total_dikemas = 0;
-    $total_pending = 0;
-    $totalProses = $total_dikemas + $total_pending;
-@endphp
-
 <div class="profile-banner-bg"></div>
 
 <div class="container mb-5">
-    <div class="row">
+    <div class="row">   
         
         <div class="col-lg-4 col-md-5 profile-card-wrapper">
             <div class="card-profile">
-                <div class="profile-header-overlap">
+                <div class="profile-header-overlap mb-3">
                     <div class="profile-img-wrapper">
                         @if(!empty($user['profile_pic']))
                             <img src="{{ asset('assets/img/profiles/' . $user['profile_pic']) }}" alt="User" id="profileImagePreview">
@@ -126,39 +75,32 @@
                         <input type="file" id="profilePicInput" name="profile_pic" accept="image/*" onchange="uploadPhoto()">
                     </form>
 
-                    <div class="tier-banner-pink">
-                        <img src="{{ asset('assets/img/medal_pro.png') }}" alt="Badge" class="tier-badge-icon-img" onerror="this.style.display='none'">
-                        <h4 class="fw-bold mb-0 ls-1">Newbie <span style="font-weight:400; font-size: 0.9rem;">TIER</span></h4>
-                        <div class="text-small mt-1 opacity-75" style="font-weight: 500;">EXP : 0 - 500</div>
-                        <div class="tier-progress-container">
-                            <div class="tier-progress-bg"><div class="tier-progress-fill"></div></div>
-                            <div class="progress-labels"><span>S0</span><span>S1</span></div>
+                    <div style="margin-left: 165px; padding-top: 15px; min-height: 120px;">
+                        <div class="location-badge-pill mb-2" style="padding: 6px 15px; font-size: 0.75rem; margin-bottom: 8px;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg" width="16" alt="ID"> 
+                            Jakarta, Indonesia
+                        </div>
+                        
+                        <div>
+                            <h3 class="fw-bold mb-0 text-truncate" style="max-width: 150px; font-size: 1.6rem;">{{ $user['fullname'] ?: $user['username'] }}</h3>
+                            <p class="text-muted mb-0" style="font-weight: 500; font-size: 0.85rem;">{{ $user['username'] }}@gmail.com</p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="px-2">
-                    <div class="location-badge-pill">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg" width="20" alt="ID"> 
-                        Jakarta, Indonesia
-                    </div>
-                    
-                    <div class="d-flex justify-content-between align-items-start mb-1">
-                        <div>
-                            <h3 class="fw-bold mb-0">{{ $user['fullname'] ?: $user['username'] }}</h3>
-                            <p class="text-muted mb-4" style="font-weight: 500;">{{ $user['username'] }}@gmail.com</p>
-                        </div>
-                        <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                    <div class="d-flex justify-content-end mb-3" style="margin-top: -20px;">
+                        <button class="btn btn-sm btn-outline-primary rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                             <i class="bi bi-pencil-square"></i> Edit
                         </button>
                     </div>
 
-                    <div class="list-group user-detail-list mb-5">
+                    <div class="list-group user-detail-list mb-4">
                         <div class="list-group-item" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                             <div>
                                 <span class="label-text">Nomor Telepon</span>
                                 <p class="value-text">
-                                    {!! $user['phone'] ? '+62 ' . $user['phone'] : '<span class="text-muted small fst-italic">Belum diisi</span>' !!}
+                                    {!! !empty($user['phone']) ? '+62 ' . $user['phone'] : '<span class="text-muted small fst-italic">Belum diisi</span>' !!}
                                 </p>
                             </div>
                             <button class="btn-edit-trigger"><i class="fas fa-chevron-right"></i></button>
@@ -168,7 +110,7 @@
                             <div>
                                 <span class="label-text">Jenis Kelamin</span>
                                 <p class="value-text">
-                                    {!! $user['gender'] ? $user['gender'] : '<span class="text-muted small fst-italic">-</span>' !!}
+                                    {!! !empty($user['gender']) ? $user['gender'] : '<span class="text-muted small fst-italic">-</span>' !!}
                                 </p>
                             </div>
                             <button class="btn-edit-trigger"><i class="fas fa-chevron-right"></i></button>
@@ -178,7 +120,7 @@
                             <div>
                                 <span class="label-text">Tanggal Lahir</span>
                                 <p class="value-text">
-                                    {!! $user['dob'] ? date('d M Y', strtotime($user['dob'])) : '<span class="text-muted small fst-italic">-</span>' !!}
+                                    {!! !empty($user['dob']) ? date('d M Y', strtotime($user['dob'])) : '<span class="text-muted small fst-italic">-</span>' !!}
                                 </p>
                             </div>
                             <button class="btn-edit-trigger"><i class="fas fa-chevron-right"></i></button>
@@ -188,7 +130,7 @@
                             <div>
                                 <span class="label-text">Alamat Rumah</span>
                                 <p class="value-text lh-sm">
-                                    {!! $user['address'] ? $user['address'] : '<span class="text-muted small fst-italic">Belum diisi</span>' !!}
+                                    {!! !empty($user['address']) ? $user['address'] : '<span class="text-muted small fst-italic">Belum diisi</span>' !!}
                                 </p>
                             </div>
                             <button class="btn-edit-trigger mt-2"><i class="fas fa-chevron-right"></i></button>
@@ -235,10 +177,10 @@
                     <div class="col-md-7">
                          <div class="row text-center gx-2 h-100">
                             <div class="col-3 position-relative">
-                                <a href="#" class="order-status-box">
+                                <a href="{{ url('dashboard/rakitan') }}" class="order-status-box">
                                     <i class="fas fa-desktop mb-2 fs-5 text-primary"></i> <span style="font-weight: 600;">Rakitan Saya</span>
                                 </a>
-                                @if($total_belanjaan > 0)
+                                @if(isset($total_belanjaan) && $total_belanjaan > 0)
                                     <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-warning text-dark border border-light shadow-sm" style="margin-left: 15px; margin-top: 5px; font-size: 0.65rem;">
                                         {{ $total_belanjaan }}
                                     </span>
@@ -251,7 +193,7 @@
                                     <span style="font-weight: 600;">Dikemas</span>
                                 </a>
 
-                                @if($totalProses > 0)
+                                @if(isset($totalProses) && $totalProses > 0)
                                     <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger border border-light shadow-sm" 
                                           style="margin-left: 15px; margin-top: 5px; font-size: 0.65rem;">
                                         {{ $totalProses }}
@@ -274,19 +216,52 @@
                 </div>
             </div>
 
-            <div class="new-pc-builder-card shadow-lg position-relative overflow-hidden">
-                <model-viewer id="pc-viewer" 
-                    src="{{ asset('assets/3d/office_pc.glb') }}" 
-                    auto-rotate rotation-per-second="-10deg" auto-rotate-delay="3000"
-                    camera-controls camera-orbit="45deg 75deg 2m" camera-target="0m 1.2m 0.2m"
-                    style="width: 100%; height: 100%; background: transparent;">
-                    
-                    <div style="position: absolute; top: 20px; right: 20px; z-index: 20;">
-                        <a href="{{ url('builder') }}" class="btn btn-primary rounded-pill px-4 fw-bold shadow-lg border-2">
-                            MULAI RAKIT SEKARANG <i class="bi bi-arrow-right ms-2"></i>
-                        </a>
-                    </div>
-                </model-viewer>
+            <!-- KARTU PREVIEW PESANAN TERBARU (Pengganti 3D Model) -->
+            <div class="card-dashboard p-4 shadow-sm bg-white" style="border-radius: 15px;">
+                <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                    <h6 class="fw-bold mb-0">
+                        <i class="fas fa-shopping-bag text-primary me-2"></i> Pesanan Terakhir
+                    </h6>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-borderless align-middle mb-0">
+                        <tbody>
+                            @forelse($recentOrders as $order)
+                                <tr class="border-bottom">
+                                    <td class="ps-0 py-3">
+                                        <div class="fw-bold text-dark text-truncate" style="max-width: 250px;">{{ $order->name }}</div>
+                                        <small class="text-muted">{{ date('d M Y, H:i', strtotime($order->created_at)) }}</small>
+                                    </td>
+                                    <td class="py-3">
+                                        @if($order->status == 'draft')
+                                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">Belum Dibayar</span>
+                                        @elseif($order->status == 'waiting_approval')
+                                            <span class="badge bg-info text-dark rounded-pill px-3 py-2">Menunggu Verifikasi</span>
+                                        @else
+                                            <span class="badge bg-success rounded-pill px-3 py-2">Diproses</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-end pe-0 py-3 fw-bold text-primary">
+                                        Rp {{ number_format($order->total_price, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">Belum ada transaksi.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Bagian Tombol Arahkan ke Pesanan Saya -->
+                <div class="text-center mt-4">
+                    <p class="text-muted small mb-2">Ingin memantau seluruh riwayat pesanan?</p>
+                    <a href="{{ url('dashboard/pesanan') }}" class="btn btn-outline-primary rounded-pill px-4 fw-bold shadow-sm">
+                        Lihat Semua Pesanan <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
