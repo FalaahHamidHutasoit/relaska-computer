@@ -224,41 +224,88 @@
 
 <section class="promo-section">
     <div class="container text-center">
-        <img src="{{ asset('assets/img/turun_harga.png') }}" alt="Promo Bundle" style="height: 100px; margin-top: -110px;" class="mb-5">
+        <!-- Banner Judul Turun Harga -->
+        <img src="{{ asset('assets/img/logo new.png') }}" alt="Promo Regresi Hardware" style="height: 100px; margin-top: -110px;" class="mb-5">
 
         <div class="row g-4 text-start">
             @php 
+            // 4 Komponen Pilihan Kelompok untuk Pembuktian Model Regresi
             $deals = [
-                ['name' => 'RELASKA Ultimate Gaming - i9 14900K + RTX 4090', 'price' => '45.500.000', 'old' => '48.000.000', 'rating' => '5.0', 'sold' => '3', 'img' => 'images.jpg'],
-                ['name' => 'RELASKA Streamer Pro - i7 14700K + RTX 4070 Ti', 'price' => '28.150.000', 'old' => '30.000.000', 'rating' => '4.9', 'sold' => '15', 'img' => 'images (1).jpg'],
-                ['name' => 'RELASKA Workstation Elite - Ryzen 9 + RTX 4080', 'price' => '35.100.000', 'old' => '37.500.000', 'rating' => '4.8', 'sold' => '8', 'img' => 'PCBUNDLE.webp'],
-                ['name' => 'RELASKA Office Master - i3 12100 + 16GB RAM', 'price' => '6.800.000', 'old' => '7.500.000', 'rating' => '4.7', 'sold' => '42', 'img' => 'GamignPCBundle.webp']
+                [
+                    'name' => 'Intel Core i9-13900K', 
+                    'price' => '8.850.000', 
+                    'old' => '9.500.000', 
+                    'rating' => '4.9', 
+                    'sold' => '24', 
+                    'img' => 'Intel Core i9-13900K.png',
+                    'badge' => '<span class="badge bg-success text-white rounded-pill px-2 py-1" style="font-size: 0.65rem;"><i class="bi bi-graph-down-arrow"></i> Turun (Sangat Murah)</span>'
+                ],
+                [
+                    'name' => 'Samsung 990 Pro 2TB', 
+                    'price' => '2.850.000', 
+                    'old' => '3.200.000', 
+                    'rating' => '5.0', 
+                    'sold' => '58', 
+                    'img' => 'Samsung 990 Pro 2TB.png',
+                    'badge' => '<span class="badge bg-success text-white rounded-pill px-2 py-1" style="font-size: 0.65rem;"><i class="bi bi-graph-down-arrow"></i> Tren Turun (Beli!)</span>'
+                ],
+                [
+                    'name' => 'AMD Ryzen 9 7900X', 
+                    'price' => '6.750.000', 
+                    'old' => '7.400.000', 
+                    'rating' => '4.8', 
+                    'sold' => '19', 
+                    'img' => 'AMD Ryzen 9 7900X.png',
+                    'badge' => '<span class="badge bg-primary text-white rounded-pill px-2 py-1" style="font-size: 0.65rem;"><i class="bi bi-dash-lg"></i> Harga Stabil</span>'
+                ],
+                [
+                    'name' => 'MSI A520M-A PRO', 
+                    'price' => '950.000', 
+                    'old' => '1.150.000', 
+                    'rating' => '4.7', 
+                    'sold' => '112', 
+                    'img' => 'MSI A520M-A PRO.png',
+                    'badge' => '<span class="badge bg-success text-white rounded-pill px-2 py-1" style="font-size: 0.65rem;"><i class="bi bi-graph-down-arrow"></i> Diskon Regresi</span>'
+                ]
             ];
             @endphp
+
             @foreach($deals as $d)
             <div class="col-md-3">
                 <div class="product-card-premium shadow">
-                    <div class="product-inner">
-                        <div class="img-container-product">
-                            <img src="{{ asset('assets/img/'.$d['img']) }}" width="80%" alt="PC Bundle">
-                        </div>
-                        <div class="p-name">{{ $d['name'] }}</div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="p-price">Rp{{ $d['price'] }}</span>
-                            <span class="p-old-price">Rp{{ $d['old'] }}</span>
-                        </div>
-                        <div class="p-rating mt-2">
-                            <i class="bi bi-star-fill"></i> {{ $d['rating'] }} - {{ $d['sold'] }} terjual
-                        </div>
-                        <div class="footer-card">
-                            <div class="d-flex align-items-center">
-                                <img src="{{ asset('assets/img/Icon Logo RELASKA rounded.png') }}" height="15" alt="Logo">
-                                <div class="ms-2 d-flex align-items-baseline gap-1 pt-1">
-                                    <span class="fw-bold" style="font-size: 14px; color: #909090;">RELASKA</span>
-                                    <span style="font-size: 10px; color: #909090; font-weight: 500;">COMPUTER</span>
-                                </div>
+                    <div class="product-inner d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="img-container-product">
+                                <!-- Pengaman onerror agar tidak rusak (broken image) jika file PNG belum diupload -->
+                                <img src="{{ asset('assets/img/'.$d['img']) }}" 
+                                     onerror="this.onerror=null; this.src='{{ asset('assets/img/default_part.png') }}';" 
+                                     width="80%" alt="{{ $d['name'] }}">
                             </div>
-                            <i class="bi bi-three-dots text-muted"></i>
+                            <div class="p-name" title="{{ $d['name'] }}">{{ $d['name'] }}</div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="p-price">Rp {{ $d['price'] }}</span>
+                                <span class="p-old-price">Rp {{ $d['old'] }}</span>
+                            </div>
+                            <!-- Mini Badge Indikator Regresi -->
+                            <div class="mb-2">
+                                {!! $d['badge'] !!}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="p-rating mt-1">
+                                <i class="bi bi-star-fill"></i> {{ $d['rating'] }} - {{ $d['sold'] }} terjual
+                            </div>
+                            <div class="footer-card">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('assets/img/Icon Logo RELASKA rounded.png') }}" height="15" alt="Logo">
+                                    <div class="ms-2 d-flex align-items-baseline gap-1 pt-1">
+                                        <span class="fw-bold" style="font-size: 14px; color: #909090;">RELASKA</span>
+                                        <span style="font-size: 10px; color: #909090; font-weight: 500;">COMPUTER</span>
+                                    </div>
+                                </div>
+                                <i class="bi bi-three-dots text-muted"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -279,32 +326,63 @@
 
     <div class="row g-4">
         @php
-            /* 
-             * OPTIMASI 1 (BACKEND): Jangan ambil semua data! 
-             * Ambil hanya ID, Nama, dan Harga agar query database super ringan.
+            /* * OPTIMASI 1 (BACKEND): Ambil data produk
              */
             $rekomendasi = \Illuminate\Support\Facades\DB::table('products')
                 ->select('id', 'name', 'price')
                 ->inRandomOrder()
                 ->limit(16)
                 ->get();
+
+            // MESIN REGRESI MINI: Ditanam langsung untuk menghitung tiap produk rekomendasi
+            foreach ($rekomendasi as $prod) {
+                $histories = \Illuminate\Support\Facades\DB::table('product_price_histories')
+                    ->where('product_id', $prod->id)
+                    ->orderBy('recorded_date', 'asc')
+                    ->get();
+
+                $n = count($histories);
+                $slope = 0;
+                
+                if ($n > 1) {
+                    $sumX = 0; $sumY = 0; $sumXY = 0; $sumX2 = 0;
+                    $x = 1;
+                    foreach ($histories as $history) {
+                        $sumX += $x;
+                        $sumY += $history->price;
+                        $sumXY += ($x * $history->price);
+                        $sumX2 += ($x * $x);
+                        $x++;
+                    }
+                    $penyebut = ($n * $sumX2) - ($sumX * $sumX);
+                    $slope = ($penyebut != 0) ? (($n * $sumXY) - ($sumX * $sumY)) / $penyebut : 0;
+                }
+
+                // Tentukan Mini Badge UI berdasarkan Slope
+                if ($slope > 50000) {
+                    $prod->trend_badge = '<span class="badge bg-danger text-white rounded-pill px-2 py-1" style="font-size: 0.65rem;"><i class="bi bi-graph-up-arrow"></i> Naik</span>';
+                } elseif ($slope < -50000) {
+                    $prod->trend_badge = '<span class="badge bg-success text-white rounded-pill px-2 py-1" style="font-size: 0.65rem;"><i class="bi bi-graph-down-arrow"></i> Turun</span>';
+                } else {
+                    $prod->trend_badge = '<span class="badge bg-primary text-white rounded-pill px-2 py-1" style="font-size: 0.65rem;"><i class="bi bi-dash-lg"></i> Stabil</span>';
+                }
+            }
         @endphp
 
         @foreach($rekomendasi as $p)
             <div class="col-md-3">
                 <a href="{{ url('product/'.$p->id) }}" class="product-grid-card">
                     <div class="product-img-box">
-                        <!-- 
-                          OPTIMASI 2 (FRONTEND): Tambahkan this.onerror=null;
-                          Ini adalah "rem darurat" agar browser tidak terjebak infinite loop 
-                          meskipun gambar default-nya juga tidak sengaja terhapus.
-                        -->
                         <img src="{{ asset('assets/img/'.$p->name.'.png') }}" 
                              onerror="this.onerror=null; this.src='{{ asset('assets/img/default_part.png') }}';" 
                              alt="{{ $p->name }}">
                     </div>
                     <div class="product-name" title="{{ $p->name }}">{{ $p->name }}</div>
-                    <div class="product-price">Rp {{ number_format($p->price, 0, ',', '.') }}</div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+                        <div class="product-price mb-0" style="font-size: 1.05rem;">Rp {{ number_format($p->price, 0, ',', '.') }}</div>
+                        {!! $p->trend_badge ?? '' !!}
+                    </div>
                 </a>
             </div>
         @endforeach

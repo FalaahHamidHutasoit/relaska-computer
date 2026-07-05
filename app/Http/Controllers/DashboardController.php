@@ -17,32 +17,94 @@ class DashboardController extends Controller
         // 2. Logic Cek Kelengkapan Profil
         $isDataLengkap = !empty($user->phone) && !empty($user->gender) && !empty($user->dob) && !empty($user->address);
 
-        // 3. Hitung Statistik Pesanan
+        // 3. Hitung Statistik Pesanan Asli dari Database
         $total_belanjaan = \Illuminate\Support\Facades\DB::table('builds')
             ->where('user_id', $user->id)
             ->where('status', 'draft')
             ->count();
 
-        $totalProses = \Illuminate\Support\Facades\DB::table('builds')
+        $totalProsesDB = \Illuminate\Support\Facades\DB::table('builds')
             ->where('user_id', $user->id)
-            ->whereIn('status', ['waiting_approval', 'paid'])
+            ->whereIn('status', ['waiting_approval', 'paid', 'processing'])
             ->count();
 
-        // --- TAMBAHAN BARU: Tarik 3 pesanan terakhir dari Database ---
-        $recentOrders = \Illuminate\Support\Facades\DB::table('builds')
+        // --- DATA TAB 1: RAKITAN SAYA (Asli dari Database) ---
+        $rakitanOrders = \Illuminate\Support\Facades\DB::table('builds')
             ->where('user_id', $user->id)
+            ->where('type', '!=', 'order') 
             ->orderBy('id', 'desc')
-            ->limit(3)
             ->get();
-        // -------------------------------------------------------------
 
-        // 4. Lempar SEMUA data ke view (Pastiin 'recentOrders' tertulis di sini!)
+        // --- DATA TAB 2: DIKEMAS (Database + Dummy jika kosong) ---
+        $dikemasOrders = \Illuminate\Support\Facades\DB::table('builds')
+            ->where('user_id', $user->id)
+            ->whereIn('status', ['waiting_approval', 'paid', 'processing'])
+            ->orderBy('id', 'desc')
+            ->get();
+
+        // Jika data dikemas asli kosong, kita kasih dummy biar tampilan tetap ramai!
+        if ($dikemasOrders->isEmpty()) {
+            $dikemasOrders = collect([
+                (object)[
+                    'name' => 'MSI GeForce RTX 4070 Super 12GB',
+                    'total_price' => 10500000,
+                    'updated_at' => now()->subHours(2),
+                    'dummy_resi' => '-'
+                ],
+                (object)[
+                    'name' => 'Corsair Vengeance RGB 32GB (2x16GB) DDR5',
+                    'total_price' => 1850000,
+                    'updated_at' => now()->subHours(5),
+                    'dummy_resi' => '-'
+                ]
+            ]);
+            $totalProses = 2; // Badge angka jadi 2
+        } else {
+            $totalProses = $totalProsesDB;
+        }
+
+        // --- DATA TAB 3: DIKIRIM (Khusus Data Dummy Simulasi) ---
+        $dikirimOrders = collect([
+            (object)[
+                'name' => 'Samsung 990 PRO NVMe M.2 SSD 2TB',
+                'total_price' => 2950000,
+                'updated_at' => now()->subDays(1),
+                'dummy_resi' => 'JNE - RLK99283741'
+            ],
+            (object)[
+                'name' => 'NZXT Kraken Elite 360 RGB Liquid Cooler',
+                'total_price' => 4200000,
+                'updated_at' => now()->subDays(2),
+                'dummy_resi' => 'JNT - RLK88123456'
+            ]
+        ]);
+
+        // --- DATA TAB 4: PENILAIAN / SELESAI (Khusus Data Dummy Simulasi) ---
+        $penilaianOrders = collect([
+            (object)[
+                'name' => 'LG UltraGear 27" QHD 165Hz Gaming Monitor',
+                'total_price' => 4500000,
+                'updated_at' => now()->subDays(5),
+                'status_rating' => 'Belum Dinilai'
+            ],
+            (object)[
+                'name' => 'Logitech G PRO X Superlight Wireless Mouse',
+                'total_price' => 1950000,
+                'updated_at' => now()->subDays(7),
+                'status_rating' => 'Belum Dinilai'
+            ]
+        ]);
+
+        // Lempar semua datanya ke View Blade
         return view('dashboard', [
             'user'            => (array) $user, 
             'isDataLengkap'   => $isDataLengkap,
             'total_belanjaan' => $total_belanjaan,
             'totalProses'     => $totalProses,
-            'recentOrders'    => $recentOrders, // <-- INI YANG BIKIN ERROR MERAH KALAU KELUPAAN
+            'rakitanOrders'   => $rakitanOrders,
+            'dikemasOrders'   => $dikemasOrders,
+            'dikirimOrders'   => $dikirimOrders,
+            'penilaianOrders' => $penilaianOrders,
         ]);
     }
     

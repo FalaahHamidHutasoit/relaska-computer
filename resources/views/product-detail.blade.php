@@ -134,6 +134,41 @@
                             <i>Detail spesifikasi belum ditambahkan oleh admin.</i>
                         @endif
                     </div>
+                    <div class="card shadow-sm border-0 rounded-4 mt-4" style="background-color: #f8f9fa;">
+                        <div class="card-body p-4 text-center">
+                            
+                            <h6 class="fw-bold mb-1" style="color: #0066ae;">
+                                <i class="fas fa-radar me-2"></i> Price Trend Radar
+                            </h6>
+                            <p class="text-muted small mb-4">
+                                Analisis fluktuasi harga 6 bulan terakhir menggunakan Model Regresi
+                            </p>
+
+                            <div class="gauge-wrapper" style="width: 240px; height: 120px; position: relative; overflow: hidden; margin: 0 auto;">
+                                
+                                <div style="width: 240px; height: 240px; border-radius: 50%; background: conic-gradient(from 270deg, #198754 0deg 60deg, #ffc107 60deg 120deg, #dc3545 120deg 180deg, transparent 180deg);"></div>
+                                
+                                <div style="width: 170px; height: 170px; background: #f8f9fa; border-radius: 50%; position: absolute; top: 35px; left: 35px;"></div>
+                                
+                                <div style="position: absolute; bottom: 0; left: 10px; font-size: 0.75rem; font-weight: 800; color: #198754;">Beli!</div>
+                                <div style="position: absolute; bottom: 0; right: 10px; font-size: 0.75rem; font-weight: 800; color: #dc3545;">Tunda</div>
+
+                                <div style="width: 105px; height: 6px; background: #2c3e50; position: absolute; bottom: -3px; left: 15px; transform-origin: 105px center; transform: rotate({{ ($trendScore ?? 50) / 100 * 180 }}deg); border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);"></div>
+                                
+                                <div style="width: 26px; height: 26px; background: #2c3e50; border-radius: 50%; position: absolute; bottom: -13px; left: 107px; border: 4px solid #f8f9fa; z-index: 10;"></div>
+                            </div>
+
+                            <div class="mt-4">
+                                <h5 class="fw-bold {{ $trendColor ?? 'text-primary' }} mb-1">{{ $trendStatus ?? 'Harga Normal / Stabil' }}</h5>
+                                <p class="small text-muted mb-0">
+                                    Berdasarkan data historis, kami menyarankan Anda untuk 
+                                    <b>{{ (!isset($trendScore) || $trendScore == 50) ? 'membeli dengan harga normal' : ($trendScore < 40 ? 'segera membeli komponen ini' : 'menunda pembelian sejenak') }}</b> 
+                                    karena harganya terpantau {{ (!isset($trendScore) || $trendScore == 50) ? 'cukup stabil' : ($trendScore < 40 ? 'sedang turun' : 'sedang naik') }}.
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -6,48 +6,80 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 
-// Rute untuk memproses data Form (metode POST)
+// ==========================================
+// RUTE AUTENTIKASI (LOGIN & REGISTER)
+// ==========================================
+Route::get('/login', function () { return view('login'); });
+Route::get('/register', function () { return view('register'); });
 Route::post('/auth/registerProcess', [AuthController::class, 'registerProcess']);
 Route::post('/auth/loginProcess', [AuthController::class, 'loginProcess']);
-
-// Rute untuk Logout (menghancurkan session)
 Route::get('/auth/logout', function () {
     session()->flush(); 
     return redirect('/')->with('msg', 'Kamu berhasil logout.');
 });
 
-// Rute Landing Page & Detail Produk (Katalog)
+// ==========================================
+// RUTE KATALOG & LANDING PAGE
+// ==========================================
 Route::get('/', [HomeController::class, 'landing']);
 Route::get('/product/{id}', [HomeController::class, 'productDetail']);
-
-// Rute untuk Kategori Dinamis (Bisa tangkap ID tunggal "1" atau multi "1,2")
 Route::get('products/category/{ids?}', [HomeController::class, 'productCategory']);
+Route::get('/home/ajaxSearch', [HomeController::class, 'ajaxSearch']);
 
-// Rute Tampilan Autentikasi (UI Saja)
-Route::get('/login', function () { return view('login'); });
-Route::get('/register', function () { return view('register'); });
-
-// Rute E-Commerce (Cart, Checkout, Payment)
+// ==========================================
+// RUTE E-COMMERCE (TRANSAKSI & KERANJANG)
+// ==========================================
 Route::get('/cart', [CartController::class, 'index']);
-Route::get('/checkout', [CartController::class, 'checkout']);
-// Ganti rute payment bca yang lama jadi ini:
-Route::get('/payment/bca/{id?}', [App\Http\Controllers\CartController::class, 'paymentBca']);
-
 Route::post('/cart/add', [CartController::class, 'add']);
-// Rute untuk memproses kuantitas dan hapus item keranjang via AJAX
 Route::post('/cart/update', [CartController::class, 'update']);
 Route::post('/cart/remove', [CartController::class, 'remove']);
-
-// Rute Halaman Checkout
-Route::get('/checkout', [CartController::class, 'checkout']);
-// Rute untuk fitur Live Search AJAX di halaman depan
-Route::get('/home/ajaxSearch', [HomeController::class, 'ajaxSearch']);  
 Route::post('/cart/buy-now', [CartController::class, 'buyNow']);
-// Rute untuk memproses data pesanan saat klik "Bayar Sekarang"
+
+// Checkout & Pembayaran
+Route::get('/checkout', [CartController::class, 'checkout']);
 Route::post('/checkout/process', [CartController::class, 'process']);
+Route::get('/payment/bca/{id?}', [CartController::class, 'paymentBca']);
 Route::post('/cart/confirmPayment', [CartController::class, 'confirmPayment']);
-// Cari rute /dashboard sementara kemarin, ganti jadi ini:
+
+// ==========================================
+// RUTE DASHBOARD USER (PROFIL & PESANAN)
+// ==========================================
 Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::get('/dashboard/pesanan', [DashboardController::class, 'pesanan']);
-// Rute untuk menerima lemparan data form edit profil dan upload foto
-Route::post('/dashboard/updateProfile', [App\Http\Controllers\DashboardController::class, 'updateProfile']);
+Route::post('/dashboard/updateProfile', [DashboardController::class, 'updateProfile']);
+
+// ==========================================
+// RUTE EKSKLUSIF (PC BUILDER & GENERATOR DATA)
+// ==========================================
+// Rute Halaman Coming Soon PC Builder
+Route::get('/builder', function () {
+    return view('builder');
+});
+
+// Rute Generator Data Dummy 6 Bulan (Buat Regresi UTS)
+Route::get('/generate-history', function () {
+    $products = \Illuminate\Support\Facades\DB::table('products')->get();
+    $historyData = [];
+    $now = now();
+
+    foreach ($products as $product) {
+        $basePrice = $product->price;
+
+        for ($i = 6; $i >= 1; $i--) {
+            $randomFluctuation = rand(-10, 10) / 100; 
+            $historicalPrice = $basePrice + ($basePrice * $randomFluctuation);
+
+            $historyData[] = [
+                'product_id' => $product->id,
+                'price' => $historicalPrice,
+                'recorded_date' => $now->copy()->subMonths($i)->format('Y-m-d'), 
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+    }
+
+    \Illuminate\Support\Facades\DB::table('product_price_histories')->insert($historyData);
+
+    return "Mantap! Data riwayat harga 6 bulan terakhir untuk semua komponen berhasil di-generate!";
+});

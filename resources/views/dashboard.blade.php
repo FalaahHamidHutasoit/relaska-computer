@@ -159,7 +159,7 @@
                                         ACTION REQUIRED
                                     </div>
                                     <p class="text-muted text-small lh-sm mb-0">
-                                        Halo, <b>{{ $user['username'] }}</b>! Profil kamu belum lengkap nih. Yuk lengkapi data diri (Alamat, No HP) agar proses pesanan lebih lancar.
+                                        Halo, <b>{{ $user['username'] }}</b>! Profil kamu belum lengkap nih. Yuk lengkapi data diri agar proses pesanan lancar.
                                     </p>
                                     <button class="btn btn-sm btn-link p-0 text-decoration-none small mt-1" data-bs-toggle="modal" data-bs-target="#editProfileModal">Lengkapi Sekarang &rarr;</button>
                                 @else
@@ -172,12 +172,12 @@
                                 @endif
                             </div>
                         </div>
-
                     </div>
+
                     <div class="col-md-7">
                          <div class="row text-center gx-2 h-100">
                             <div class="col-3 position-relative">
-                                <a href="{{ url('dashboard/rakitan') }}" class="order-status-box">
+                                <a href="javascript:void(0)" onclick="switchTab('rakitan')" class="order-status-box">
                                     <i class="fas fa-desktop mb-2 fs-5 text-primary"></i> <span style="font-weight: 600;">Rakitan Saya</span>
                                 </a>
                                 @if(isset($total_belanjaan) && $total_belanjaan > 0)
@@ -188,78 +188,120 @@
                             </div>
 
                             <div class="col-3 position-relative">
-                                <a href="{{ url('dashboard/pesanan') }}" class="order-status-box">
-                                    <i class="fas fa-box-open mb-2 fs-5"></i>
+                                <a href="javascript:void(0)" onclick="switchTab('dikemas')" class="order-status-box">
+                                    <i class="fas fa-box-open mb-2 fs-5 text-warning"></i>
                                     <span style="font-weight: 600;">Dikemas</span>
                                 </a>
-
                                 @if(isset($totalProses) && $totalProses > 0)
-                                    <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger border border-light shadow-sm" 
-                                          style="margin-left: 15px; margin-top: 5px; font-size: 0.65rem;">
+                                    <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger border border-light shadow-sm" style="margin-left: 15px; margin-top: 5px; font-size: 0.65rem;">
                                         {{ $totalProses }}
                                     </span>
                                 @endif
                             </div>
 
-                            <div class="col-3">
-                                <a href="#" class="order-status-box">
-                                    <i class="fas fa-truck mb-2 fs-5"></i> <span>Dikirim</span>
+                            <div class="col-3 position-relative">
+                                <a href="javascript:void(0)" onclick="switchTab('dikirim')" class="order-status-box">
+                                    <i class="fas fa-truck mb-2 fs-5 text-info"></i> <span style="font-weight: 600;">Dikirim</span>
                                 </a>
+                                <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-primary border border-light shadow-sm" style="margin-left: 15px; margin-top: 5px; font-size: 0.65rem;">
+                                    2
+                                </span>
                             </div>
-                            <div class="col-3">
-                                <a href="#" class="order-status-box">
-                                    <i class="fas fa-star mb-2 fs-5"></i> <span>Penilaian</span>
+
+                            <div class="col-3 position-relative">
+                                <a href="javascript:void(0)" onclick="switchTab('penilaian')" class="order-status-box">
+                                    <i class="fas fa-star mb-2 fs-5 text-success"></i> <span style="font-weight: 600;">Penilaian</span>
                                 </a>
+                                <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-success border border-light shadow-sm" style="margin-left: 15px; margin-top: 5px; font-size: 0.65rem;">
+                                    2
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- KARTU PREVIEW PESANAN TERBARU (Pengganti 3D Model) -->
             <div class="card-dashboard p-4 shadow-sm bg-white" style="border-radius: 15px;">
                 <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-                    <h6 class="fw-bold mb-0">
-                        <i class="fas fa-shopping-bag text-primary me-2"></i> Pesanan Terakhir
+                    <h6 class="fw-bold mb-0" id="card-table-title">
+                        <i class="fas fa-desktop text-primary me-2"></i> Daftar Rakitan PC Saya
                     </h6>
+                    <span class="badge bg-light text-muted border" id="card-table-subtitle">Filter: Rakitan</span>
                 </div>
 
                 <div class="table-responsive">
                     <table class="table table-borderless align-middle mb-0">
-                        <tbody>
-                            @forelse($recentOrders as $order)
+                        
+                        <tbody id="content-rakitan" class="tab-content-order">
+                            @forelse($rakitanOrders as $order)
+                                <tr class="border-bottom">
+                                    <td class="ps-0 py-3">
+                                        <div class="fw-bold text-primary text-truncate" style="max-width: 250px;"><i class="bi bi-pc-display me-1"></i> {{ $order->name }}</div>
+                                        <small class="text-muted">Dirakit pada: {{ date('d M Y, H:i', strtotime($order->created_at)) }}</small>
+                                    </td>
+                                    <td class="py-3">
+                                        <span class="badge bg-primary rounded-pill px-3 py-2">PC Builder</span>
+                                    </td>
+                                    <td class="text-end pe-0 py-3 fw-bold text-dark">Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="3" class="text-center text-muted py-4">Belum ada riwayat rakitan PC.</td></tr>
+                            @endforelse
+                        </tbody>
+
+                        <tbody id="content-dikemas" class="tab-content-order" style="display: none;">
+                            @foreach($dikemasOrders as $order)
                                 <tr class="border-bottom">
                                     <td class="ps-0 py-3">
                                         <div class="fw-bold text-dark text-truncate" style="max-width: 250px;">{{ $order->name }}</div>
-                                        <small class="text-muted">{{ date('d M Y, H:i', strtotime($order->created_at)) }}</small>
+                                        <small class="text-muted">Update: {{ date('d M Y, H:i', strtotime($order->updated_at)) }}</small>
                                     </td>
                                     <td class="py-3">
-                                        @if($order->status == 'draft')
-                                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">Belum Dibayar</span>
-                                        @elseif($order->status == 'waiting_approval')
-                                            <span class="badge bg-info text-dark rounded-pill px-3 py-2">Menunggu Verifikasi</span>
-                                        @else
-                                            <span class="badge bg-success rounded-pill px-3 py-2">Diproses</span>
-                                        @endif
+                                        <span class="badge bg-warning text-dark rounded-pill px-3 py-2"><i class="bi bi-box-seam me-1"></i> Sedang Dikemas</span>
                                     </td>
-                                    <td class="text-end pe-0 py-3 fw-bold text-primary">
-                                        Rp {{ number_format($order->total_price, 0, ',', '.') }}
-                                    </td>
+                                    <td class="text-end pe-0 py-3 fw-bold text-primary">Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="text-center text-muted py-4">Belum ada transaksi.</td>
-                                </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
+
+                        <tbody id="content-dikirim" class="tab-content-order" style="display: none;">
+                            @foreach($dikirimOrders as $order)
+                                <tr class="border-bottom">
+                                    <td class="ps-0 py-3">
+                                        <div class="fw-bold text-dark text-truncate" style="max-width: 250px;">{{ $order->name }}</div>
+                                        <small class="text-info fw-bold"><i class="bi bi-truck me-1"></i> Resi: {{ $order->dummy_resi }}</small>
+                                    </td>
+                                    <td class="py-3">
+                                        <span class="badge bg-info text-dark rounded-pill px-3 py-2">Dalam Perjalanan</span>
+                                    </td>
+                                    <td class="text-end pe-0 py-3 fw-bold text-primary">Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+
+                        <tbody id="content-penilaian" class="tab-content-order" style="display: none;">
+                            @foreach($penilaianOrders as $order)
+                                <tr class="border-bottom">
+                                    <td class="ps-0 py-3">
+                                        <div class="fw-bold text-dark text-truncate" style="max-width: 250px;">{{ $order->name }}</div>
+                                        <small class="text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Paket Diterima</small>
+                                    </td>
+                                    <td class="py-3">
+                                        <button class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold" onclick="Swal.fire('Terima Kasih!', 'Ulasan kamu sangat berarti untuk RELASKA.', 'success')">
+                                            <i class="bi bi-star-fill me-1"></i> Beri Ulasan
+                                        </button>
+                                    </td>
+                                    <td class="text-end pe-0 py-3 fw-bold text-dark">Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+
                     </table>
                 </div>
 
-                <!-- Bagian Tombol Arahkan ke Pesanan Saya -->
                 <div class="text-center mt-4">
-                    <p class="text-muted small mb-2">Ingin memantau seluruh riwayat pesanan?</p>
                     <a href="{{ url('dashboard/pesanan') }}" class="btn btn-outline-primary rounded-pill px-4 fw-bold shadow-sm">
-                        Lihat Semua Pesanan <i class="bi bi-arrow-right ms-2"></i>
+                        Lihat Seluruh Riwayat Pesanan <i class="bi bi-arrow-right ms-2"></i>
                     </a>
                 </div>
             </div>
@@ -393,6 +435,36 @@
         });
     }
 
+    // FUNGSI GANTI ISI TABEL TANPA RELOAD HALAMAN
+    // FUNGSI GANTI ISI TABEL TANPA RELOAD HALAMAN (4 TAB)
+    function switchTab(jenis) {
+        // Sembunyikan semua isi tabel terlebih dahulu
+        document.querySelectorAll('.tab-content-order').forEach(el => {
+            el.style.display = 'none';
+        });
+
+        const titleEl = document.getElementById('card-table-title');
+        const subtitleEl = document.getElementById('card-table-subtitle');
+
+        if (jenis === 'rakitan') {
+            document.getElementById('content-rakitan').style.display = 'table-row-group';
+            titleEl.innerHTML = '<i class="fas fa-desktop text-primary me-2"></i> Daftar Rakitan PC Saya';
+            subtitleEl.innerText = 'Filter: Rakitan';
+        } else if (jenis === 'dikemas') {
+            document.getElementById('content-dikemas').style.display = 'table-row-group';
+            titleEl.innerHTML = '<i class="fas fa-box-open text-warning me-2"></i> Pesanan Sedang Dikemas';
+            subtitleEl.innerText = 'Filter: Dikemas';
+        } else if (jenis === 'dikirim') {
+            document.getElementById('content-dikirim').style.display = 'table-row-group';
+            titleEl.innerHTML = '<i class="fas fa-truck text-info me-2"></i> Pesanan Dalam Pengiriman';
+            subtitleEl.innerText = 'Filter: Dikirim';
+        } else if (jenis === 'penilaian') {
+            document.getElementById('content-penilaian').style.display = 'table-row-group';
+            titleEl.innerHTML = '<i class="fas fa-star text-success me-2"></i> Menunggu Penilaian Kamu';
+            subtitleEl.innerText = 'Filter: Selesai';
+        }
+    }
+    
     document.querySelector('#pc-viewer').addEventListener('error', (event) => {
         console.error("Gagal load model 3D. Pastikan file office_pc.glb ada di folder public/assets/3d/", event);
     });
