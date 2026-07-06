@@ -39,6 +39,55 @@
     .vga-card .cat-info h6 { font-size: 21px; }
     .cat-info span { font-size: 14px; color: #7d7d7d; font-weight: 600; display: block; }
     .pm-card img { max-width: 300px; }
+    /* =========================================
+       PRICE TREND RADAR SECTION
+       ========================================= */
+    .radar-section { background: #0a1128 url('{{ asset("assets/img/hexagon_bg.png") }}'); background-size: cover; padding: 70px 0 120px; margin-top: 130px; border-radius: 60px 60px 0 0; position: relative; }
+    .radar-section::after { content: ""; position: absolute; bottom: -1px; left: 0; width: 100%; height: 60px; background: white; border-radius: 60px 60px 0 0; }
+    .radar-card {
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+        height: 100%;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        border: 2px solid transparent;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+    }
+    .radar-card:hover { 
+        transform: translateY(-10px); 
+        border-color: #0d6efd; 
+        box-shadow: 0 15px 35px rgba(13, 110, 253, 0.2); 
+    }
+    .radar-img-box { background: #f8fafc; border-radius: 15px; height: 160px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; padding: 10px; }
+    .radar-img-box img { max-width: 90%; max-height: 90%; object-fit: contain; }
+    
+    /* Gauge / Speedometer Style */
+    .mini-gauge-wrapper { width: 160px; height: 80px; position: relative; overflow: hidden; margin: 15px auto 5px; }
+    .mini-gauge-bg { width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(from 270deg, #198754 0deg 60deg, #ffc107 60deg 120deg, #dc3545 120deg 180deg, transparent 180deg); }
+    .mini-gauge-inner { width: 110px; height: 110px; background: white; border-radius: 50%; position: absolute; top: 25px; left: 25px; }
+    .mini-gauge-label-l { position: absolute; bottom: 4px; left: 12px; font-size: 0.65rem; font-weight: 800; color: #1a2a3a; z-index: 20; }
+    .mini-gauge-label-r { position: absolute; bottom: 4px; right: 12px; font-size: 0.65rem; font-weight: 800; color: #1a2a3a; z-index: 20; }
+    .mini-gauge-needle { width: 70px; height: 4px; background: #1e293b; position: absolute; bottom: -2px; left: 10px; transform-origin: 70px center; border-radius: 4px; transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
+    .mini-gauge-center {
+        /* Tambahkan shadow pada titik tengah jarum agar lebih realistis */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    /* Tambahkan label keterangan warna statis di bawah speedometer */
+    .gauge-legend {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        font-size: 0.6rem;
+        margin-top: 5px;
+        color: #64748b;
+    }
+    .gauge-legend span::before {
+        content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px;
+    }
+    .legend-buy::before { background: #198754; }
+    .legend-hold::before { background: #dc3545; }
+
+    /* Promo Section */
     .promo-section { background: #1a2a3a url('{{ asset("assets/img/hexagon_bg.png") }}'); background-size: cover; padding: 60px 0 110px; margin-top: 130px; border-radius: 60px 60px 0 0; position: relative; }
     .promo-section::after { content: ""; position: absolute; bottom: -1px; left: 0; width: 100%; height: 60px; background: white; border-radius: 60px 60px 0 0; }
     .product-card-premium { background: white; border-radius: 20px; padding: 4px; background: linear-gradient(to bottom, #D72C84 0%, #FFE100 20%, #0A97D8 80%, #008cffff 100%); height: 100%; transition: transform 0.3s ease; }
@@ -222,95 +271,79 @@
     </div>
 </section>
 
-<section class="promo-section">
+<!-- ===== PRICE TREND RADAR: MARKET HIGHLIGHTS ===== -->
+<section class="radar-section">
     <div class="container text-center">
-        <!-- Banner Judul Turun Harga -->
-        <img src="{{ asset('assets/img/logo new.png') }}" alt="Promo Regresi Hardware" style="height: 100px; margin-top: -110px;" class="mb-5">
+        <!-- Wadah Judul Section Berupa Gambar (Sesuai Mockup) -->
+        <img src="{{ asset('assets/img/logo new.png') }}" 
+             alt="Price Trend Radar: Smart Buy Recommendations" 
+             style="height: 140px; margin-top: -130px; position: relative; z-index: 10;" 
+             class="mb-5 img-fluid">
 
         <div class="row g-4 text-start">
-            @php 
-            // 4 Komponen Pilihan Kelompok untuk Pembuktian Model Regresi
-            $deals = [
-                [
-                    'name' => 'Intel Core i9-13900K', 
-                    'price' => '8.850.000', 
-                    'old' => '9.500.000', 
-                    'rating' => '4.9', 
-                    'sold' => '24', 
-                    'img' => 'Intel Core i9-13900K.png',
-                    'badge' => '<span class="badge bg-success text-white rounded-pill px-2 py-1" style="font-size: 0.65rem;"><i class="bi bi-graph-down-arrow"></i> Turun (Sangat Murah)</span>'
-                ],
-                [
-                    'name' => 'Samsung 990 Pro 2TB', 
-                    'price' => '2.850.000', 
-                    'old' => '3.200.000', 
-                    'rating' => '5.0', 
-                    'sold' => '58', 
-                    'img' => 'Samsung 990 Pro 2TB.png',
-                    'badge' => '<span class="badge bg-success text-white rounded-pill px-2 py-1" style="font-size: 0.65rem;"><i class="bi bi-graph-down-arrow"></i> Tren Turun (Beli!)</span>'
-                ],
-                [
-                    'name' => 'AMD Ryzen 9 7900X', 
-                    'price' => '6.750.000', 
-                    'old' => '7.400.000', 
-                    'rating' => '4.8', 
-                    'sold' => '19', 
-                    'img' => 'AMD Ryzen 9 7900X.png',
-                    'badge' => '<span class="badge bg-primary text-white rounded-pill px-2 py-1" style="font-size: 0.65rem;"><i class="bi bi-dash-lg"></i> Harga Stabil</span>'
-                ],
-                [
-                    'name' => 'MSI A520M-A PRO', 
-                    'price' => '950.000', 
-                    'old' => '1.150.000', 
-                    'rating' => '4.7', 
-                    'sold' => '112', 
-                    'img' => 'MSI A520M-A PRO.png',
-                    'badge' => '<span class="badge bg-success text-white rounded-pill px-2 py-1" style="font-size: 0.65rem;"><i class="bi bi-graph-down-arrow"></i> Diskon Regresi</span>'
-                ]
-            ];
-            @endphp
-
-            @foreach($deals as $d)
+            @foreach($radarItems as $item)
             <div class="col-md-3">
-                <div class="product-card-premium shadow">
-                    <div class="product-inner d-flex flex-column justify-content-between">
-                        <div>
-                            <div class="img-container-product">
-                                <!-- Pengaman onerror agar tidak rusak (broken image) jika file PNG belum diupload -->
-                                <img src="{{ asset('assets/img/'.$d['img']) }}" 
-                                     onerror="this.onerror=null; this.src='{{ asset('assets/img/default_part.png') }}';" 
-                                     width="80%" alt="{{ $d['name'] }}">
-                            </div>
-                            <div class="p-name" title="{{ $d['name'] }}">{{ $d['name'] }}</div>
-                            <div class="d-flex align-items-center gap-2 mb-1">
-                                <span class="p-price">Rp {{ $d['price'] }}</span>
-                                <span class="p-old-price">Rp {{ $d['old'] }}</span>
-                            </div>
-                            <!-- Mini Badge Indikator Regresi -->
-                            <div class="mb-2">
-                                {!! $d['badge'] !!}
-                            </div>
+                <div class="radar-card shadow">
+                    <!-- Area Gambar -->
+                    <div class="radar-img-box">
+                        <img src="{{ asset('assets/img/'.$item['img']) }}" 
+                             onerror="this.onerror=null; this.src='{{ asset('assets/img/default_part.png') }}';" 
+                             alt="{{ $item['name'] }}">
+                    </div>
+                    
+                    <!-- Info Produk -->
+                    <div class="p-name text-center" title="{{ $item['name'] }}">{{ $item['name'] }}</div>
+                    <div class="text-center mb-3">
+                        <span class="p-price fs-5">Rp {{ $item['price'] }}</span>
+                    </div>
+
+                    <hr class="text-muted opacity-25">
+
+                    <!-- Visualisasi Speedometer (Gauge) UX -->
+                    <div class="text-center">
+                        <div class="mini-gauge-wrapper">
+                            <div class="mini-gauge-bg"></div>
+                            <div class="mini-gauge-inner"></div>
+                            <!-- Transform Rotasi Jarum berdasarkan Skor Regresi -->
+                            <div class="mini-gauge-needle" style="transform: rotate({{ ($item['score'] / 100) * 180 }}deg);"></div>
+                            <div class="mini-gauge-center"></div>
                         </div>
                         
-                        <div>
-                            <div class="p-rating mt-1">
-                                <i class="bi bi-star-fill"></i> {{ $d['rating'] }} - {{ $d['sold'] }} terjual
-                            </div>
-                            <div class="footer-card">
-                                <div class="d-flex align-items-center">
-                                    <img src="{{ asset('assets/img/Icon Logo RELASKA rounded.png') }}" height="15" alt="Logo">
-                                    <div class="ms-2 d-flex align-items-baseline gap-1 pt-1">
-                                        <span class="fw-bold" style="font-size: 14px; color: #909090;">RELASKA</span>
-                                        <span style="font-size: 10px; color: #909090; font-weight: 500;">COMPUTER</span>
-                                    </div>
-                                </div>
-                                <i class="bi bi-three-dots text-muted"></i>
-                            </div>
+                        <!-- Label Beli & Tunda dipindah ke luar lingkaran -->
+                        <div class="d-flex justify-content-between px-4 mt-1" style="font-size: 0.7rem; font-weight: 800; color: #1a2a3a;">
+                            <span>BELI</span>
+                            <span>TUNDA</span>
                         </div>
+                        
+                        <div class="gauge-legend mt-2">
+                            <span class="legend-buy">Waktu Beli Terbaik</span>
+                            <span class="legend-hold">Rawan Kerugian</span>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <h6 class="fw-bold mb-1 {{ $item['color'] }}" style="font-size: 0.85rem;">
+                                {{ $item['status'] }}
+                            </h6>
+                            <small class="text-muted d-block" style="font-size: 0.7rem;">
+                                <i class="bi bi-graph-down-arrow me-1"></i> {{ $item['desc'] }}
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Button -->
+                    <div class="mt-3">
+                        <a href="{{ url('product/'.$item['id']) }}" class="btn btn-sm btn-outline-primary w-100 rounded-pill fw-bold">
+                            Lihat Detail
+                        </a>
                     </div>
                 </div>
             </div>
             @endforeach
+        </div>
+        
+        <!-- Kesimpulan Regresi untuk User Awam -->
+        <div class="mt-5 text-light opacity-75 small">
+            <i class="bi bi-info-circle-fill me-1"></i> Data dianalisis secara *real-time* dari riwayat harga 6 bulan terakhir..
         </div>
     </div>
 </section>

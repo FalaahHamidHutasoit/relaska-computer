@@ -57,8 +57,13 @@
                     <h1 class="product-title">{{ $product->name }}</h1>
                     <p class="text-muted small">Kategori: <b>{{ $product->brand ?: 'RELASKA' }}</b></p>
                     
-                    <h2 class="price-tag">Rp {{ number_format($product->price, 0, ',', '.') }}</h2>
-                    
+                    <h2 class="price-tag mb-1">Rp {{ number_format($product->price, 0, ',', '.') }}</h2>
+
+                    <!-- SHORTCUT TRIGGER UI -->
+                    <a href="#radar-analitik" class="badge bg-light text-primary border border-primary text-decoration-none mb-4 d-inline-flex align-items-center py-2 px-3" style="font-size: 0.75rem; transition: 0.3s; box-shadow: 0 4px 6px rgba(13,110,253,0.1);">
+                        <i class="bi bi-radar me-2" style="animation: pulse 2s infinite;"></i> 
+                        Cek Prediksi Harga Sebelum Membeli!
+                    </a>
                     <div class="d-flex align-items-center gap-3 mb-4">
                         <div class="d-flex align-items-center border rounded-3 p-1" style="width: 120px;">
                             <button class="btn btn-link text-dark" onclick="changeQty(-1)"><i class="bi bi-dash"></i></button>
@@ -134,7 +139,8 @@
                             <i>Detail spesifikasi belum ditambahkan oleh admin.</i>
                         @endif
                     </div>
-                    <div class="card shadow-sm border-0 rounded-4 mt-4" style="background-color: #f8f9fa;">
+                    <!-- Menambahkan ID radar-analitik agar tombol shortcut di atas bisa berfungsi -->
+                    <div class="card shadow-sm border-0 rounded-4 mt-4" style="background-color: #f8f9fa;" id="radar-analitik">
                         <div class="card-body p-4 text-center">
                             
                             <h6 class="fw-bold mb-1" style="color: #0066ae;">
@@ -144,18 +150,20 @@
                                 Analisis fluktuasi harga 6 bulan terakhir menggunakan Model Regresi
                             </p>
 
+                            <!-- Lingkaran Speedometer murni tanpa teks di dalamnya -->
                             <div class="gauge-wrapper" style="width: 240px; height: 120px; position: relative; overflow: hidden; margin: 0 auto;">
-                                
                                 <div style="width: 240px; height: 240px; border-radius: 50%; background: conic-gradient(from 270deg, #198754 0deg 60deg, #ffc107 60deg 120deg, #dc3545 120deg 180deg, transparent 180deg);"></div>
-                                
                                 <div style="width: 170px; height: 170px; background: #f8f9fa; border-radius: 50%; position: absolute; top: 35px; left: 35px;"></div>
-                                
-                                <div style="position: absolute; bottom: 0; left: 10px; font-size: 0.75rem; font-weight: 800; color: #198754;">Beli!</div>
-                                <div style="position: absolute; bottom: 0; right: 10px; font-size: 0.75rem; font-weight: 800; color: #dc3545;">Tunda</div>
 
+                                <!-- Jarum Speedometer -->
                                 <div style="width: 105px; height: 6px; background: #2c3e50; position: absolute; bottom: -3px; left: 15px; transform-origin: 105px center; transform: rotate({{ ($trendScore ?? 50) / 100 * 180 }}deg); border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);"></div>
-                                
-                                <div style="width: 26px; height: 26px; background: #2c3e50; border-radius: 50%; position: absolute; bottom: -13px; left: 107px; border: 4px solid #f8f9fa; z-index: 10;"></div>
+                                <div style="width: 26px; height: 26px; background: #2c3e50; border-radius: 50%; position: absolute; bottom: -13px; left: 107px; border: 4px solid #f8f9fa; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"></div>
+                            </div>
+                            
+                            <!-- Label Beli & Tunda dipindah ke luar (di bawah speedometer) dengan warna Hitam -->
+                            <div class="d-flex justify-content-between mt-2" style="font-size: 0.85rem; font-weight: 800; color: #1a2a3a; max-width: 260px; margin: 0 auto;">
+                                <span>BELI</span>
+                                <span>TUNDA</span>
                             </div>
 
                             <div class="mt-4">
@@ -165,6 +173,18 @@
                                     <b>{{ (!isset($trendScore) || $trendScore == 50) ? 'membeli dengan harga normal' : ($trendScore < 40 ? 'segera membeli komponen ini' : 'menunda pembelian sejenak') }}</b> 
                                     karena harganya terpantau {{ (!isset($trendScore) || $trendScore == 50) ? 'cukup stabil' : ($trendScore < 40 ? 'sedang turun' : 'sedang naik') }}.
                                 </p>
+                                
+                                <!-- INI DIA POSISI LANGKAH 3: Trust Badge (Lencana Kepercayaan) -->
+                                <div class="mt-3 p-3 border-top" style="border-style: dashed !important; border-color: #e2e8f0;">
+                                    <div class="d-flex align-items-center justify-content-center text-muted" style="font-size: 0.65rem; text-align: left;">
+                                        <i class="bi bi-shield-fill-check text-success fs-5 me-2"></i>
+                                        <div>
+                                            <b>Akurasi Analitik Terverifikasi</b><br>
+                                            <span class="opacity-75">Dihitung dari riwayat fluktuasi 6 bulan terakhir.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- AKHIR LANGKAH 3 -->
                             </div>
 
                         </div>
