@@ -138,6 +138,64 @@
     .product-img-box img { max-width: 85%; max-height: 85%; object-fit: contain; }
     .product-name { font-weight: 700; font-size: 0.95rem; color: #1e293b; height: 45px; overflow: hidden; margin-bottom: 8px; }
     .product-price { color: #0f172a; font-weight: 800; font-size: 1.2rem; }
+
+    /* ======================================================== */
+    /* 📱 RESPONSIVE KARTU RADAR REGRESI (GRID 2x2 DI HP)      */
+    /* ======================================================== */
+    @media (max-width: 768px) {
+        /* 1. Atur jarak barisnya agar lebih merapat */
+        .radar-section .row {
+            margin-right: -5px !important;
+            margin-left: -5px !important;
+        }
+        
+        /* 2. Paksa kolom menjadi 50% (2 menyamping) */
+        .radar-section .col-md-3 {
+            flex: 0 0 50% !important;
+            max-width: 50% !important;
+            padding-right: 5px !important;
+            padding-left: 5px !important;
+            margin-bottom: 10px !important;
+        }
+
+        /* 3. Penyesuaian isi kartu agar muat dibagi 2 */
+        .radar-card {
+            padding: 10px !important; /* Padding kartu diperkecil */
+        }
+        .radar-img-box {
+            height: 90px !important; /* Kotak gambar lebih ceper */
+            padding: 5px !important;
+            margin-bottom: 10px !important;
+        }
+        .radar-card .p-name {
+            font-size: 10.5px !important; /* Teks nama produk dikecilkan */
+            height: 30px !important; 
+            line-height: 1.3 !important;
+            margin-bottom: 5px !important;
+        }
+        .radar-card .p-price {
+            font-size: 12.5px !important; 
+        }
+        
+        /* 4. MAGIC FIX: Mengecilkan Speedometer Regresi */
+        .mini-gauge-wrapper {
+            transform: scale(0.55) !important; /* Susutkan speedometer jadi 55% */
+            transform-origin: top center !important;
+            margin-bottom: -35px !important; /* Tarik elemen di bawahnya agar ikut naik */
+            margin-top: 5px !important;
+        }
+        
+        /* 5. Kecilkan ukuran Label & Tombol */
+        .radar-card .d-flex.justify-content-between { font-size: 0.55rem !important; margin-top: -5px !important; }
+        .gauge-legend { font-size: 0.5rem !important; flex-wrap: wrap; justify-content: center; gap: 4px; }
+        .radar-card h6 { font-size: 0.75rem !important; }
+        .radar-card small { font-size: 0.6rem !important; }
+        
+        .radar-card .btn {
+            font-size: 9.5px !important;
+            padding: 5px 8px !important;
+        }
+    }
 </style>
 @endsection
 
@@ -638,6 +696,74 @@ searchInput.addEventListener('keyup', function() {
 document.addEventListener('click', function(e) {
     if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
         searchResults.style.display = 'none';
+    }
+});
+
+
+// ========================================================
+// POP-UP KHUSUS RESPONDEN PENGUJIAN REGRESI
+// ========================================================
+// ========================================================
+// POP-UP KHUSUS RESPONDEN PENGUJIAN REGRESI (UPDATE SCROLL)
+// ========================================================
+// ========================================================
+// POP-UP KHUSUS RESPONDEN PENGUJIAN REGRESI (FINAL FIX SCROLL)
+// ========================================================
+document.addEventListener("DOMContentLoaded", function() {
+    // Cek apakah pop-up sudah pernah muncul di sesi ini
+    if (!sessionStorage.getItem('respondentPopupShown')) {
+        
+        // Kasih jeda 1 detik setelah web loading
+        setTimeout(() => {
+            Swal.fire({
+                title: 'Selamat Datang, Responden!',
+                html: 'Terima kasih telah berpartisipasi dalam pengujian sistem kami.<br><br>Fokus utama website ini adalah <b>Model Prediksi Regresi Harga Hardware (Price Trend Radar)</b>.<br><br>Apakah Anda ingin langsung diantarkan ke fitur tersebut?',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: '</i> Ya, Antar Saya Kesana!',
+                cancelButtonText: 'Tidak, Biar Saya Eksplor Sendiri',
+                confirmButtonColor: '#0d6efd',
+                cancelButtonColor: '#6c757d',
+                reverseButtons: true,
+                backdrop: `rgba(0,0,0,0.6)`
+            }).then((result) => {
+                // Tandai bahwa pop-up sudah muncul
+                sessionStorage.setItem('respondentPopupShown', 'true');
+                
+                // Jika Responden klik "YA"
+                if (result.isConfirmed) {
+                    
+                    // KUNCI JAWABANNYA: Delay 400ms nunggu pop-up hilang & layar di-unlock
+                    setTimeout(() => {
+                        const radarSection = document.querySelector('.radar-section');
+                        if(radarSection) {
+                            
+                            const headerOffset = 110; 
+                            const elementPosition = radarSection.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      
+                            window.scrollTo({
+                                 top: offsetPosition,
+                                 behavior: "smooth"
+                            });
+                            
+                            // Beri efek Glow Biru sebagai penekanan UX
+                            setTimeout(() => {
+                                radarSection.style.transition = "box-shadow 0.8s ease-in-out";
+                                radarSection.style.boxShadow = "0 0 40px rgba(13, 110, 253, 0.6)";
+                                radarSection.style.borderRadius = "60px 60px 0 0";
+                                radarSection.style.zIndex = "100";
+                                
+                                // Hilangkan glow setelah 3 detik
+                                setTimeout(() => {
+                                    radarSection.style.boxShadow = "none";
+                                }, 3000);
+                            }, 800); // Nunggu animasi scroll selesai
+                        }
+                    }, 400); // Jeda 400ms disini!
+                }
+            });
+        }, 1000);
     }
 });
 </script>

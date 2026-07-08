@@ -248,6 +248,210 @@
         border-radius: 50%;
         border: 2px solid white;
     }
+
+ /* ======================================================== */
+    /* 📱 CSS RESPONSIVE KHUSUS MOBILE (MAX-WIDTH: 768px)       */
+    /* ======================================================== */
+    /* ======================================================== */
+    /* 📱 CSS RESPONSIVE KHUSUS MOBILE (MAX-WIDTH: 768px)       */
+    /* ======================================================== */
+    @media (max-width: 768px) {
+        
+        /* 1. OBAT ANTI GESER LAYAR (HORIZONTAL OVERFLOW FIX) */
+        html, body {
+            overflow-x: hidden !important;
+            max-width: 100vw !important;
+            position: relative;
+        }
+        .navbar, .container-fluid, header {
+            max-width: 100vw !important;
+            /* overflow-x: hidden; DIHAPUS DARI HEADER AGAR POPUP SELAMAT! */
+        }
+
+        /* ================================================== */
+        /* FIX UKURAN POPUP PROFIL & KERANJANG BIAR PAS DI HP */
+        /* ================================================== */
+        .auth-dropdown-menu {
+            width: 250px !important; 
+            right: -30px !important; 
+            padding: 15px !important;
+        }
+        .cart-dropdown-menu {
+            width: 290px !important; 
+            right: -10px !important;
+            padding: 15px !important;
+        }
+
+        /* 2. MENGECILKAN HEADER (LOGO, SEARCH, PROFIL, CART) */
+        .navbar-top .container {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 8px !important;
+            padding: 10px 15px 5px !important;
+        }
+        
+        /* Logo Relaska */
+        .navbar-brand { margin-right: 0 !important; padding: 0 !important; }
+        .navbar-brand img { height: 22px !important; width: auto !important; }
+
+        /* MENGHILANGKAN SEARCH BAR KHUSUS DI HP */
+        .search-container {
+            display: none !important; 
+        }
+
+        /* Teks Sign In / Nama User (ANTI-PATAH) */
+        .auth-hover-container a { 
+            font-size: 11px !important; 
+            gap: 4px !important; 
+            white-space: nowrap !important; 
+        }
+        .auth-hover-container a i.fs-5 { font-size: 14px !important; }
+        
+        /* Ikon & Teks Keranjang (ANTI-PATAH) */
+        #navbar-cart-icon i.bi-cart3 { font-size: 18px !important; }
+        .cart-hover-container .fw-bold { 
+            font-size: 10px !important; 
+            white-space: nowrap !important; 
+        }
+        .cart-hover-container small { 
+            font-size: 9px !important; 
+            white-space: nowrap !important; 
+        }
+        .cart-indicator { width: 8px; height: 8px; top: -2px; right: 0px; }
+        
+        /* Hilangkan garis pemisah vertikal di HP */
+        .navbar-top .vr { display: none !important; }
+
+        /* 3. FIX MENU KATEGORI MACET BIAR BISA DI-SWIPE */
+        #navbar-categories {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important; 
+            width: 100% !important;
+            padding-bottom: 8px !important;
+            padding-top: 8px !important;
+            justify-content: flex-start !important; 
+            gap: 5px;
+        }
+        
+        #navbar-categories .nav-link-custom {
+            flex: 0 0 auto !important; 
+            white-space: nowrap !important;
+            font-size: 11.5px !important;
+            padding: 4px 10px !important;
+        }
+        
+        #navbar-categories::-webkit-scrollbar { display: none; }
+        .nav-magic-line { display: none !important; }
+        .btn-pc-builder-nav { margin-left: 5px !important; font-size: 11px !important; padding: 4px 12px !important; }
+
+        /* ================================================== */
+        /* 4. PERBAIKAN SISA HALAMAN LAINNYA                  */
+        /* ================================================== */
+        
+        /* FIX REKOMENDASI PRODUK 2x2 */
+        .recommended-section .row { margin-right: -5px !important; margin-left: -5px !important; }
+        .recommended-section .col-md-3 { flex: 0 0 50% !important; max-width: 50% !important; padding-right: 5px !important; padding-left: 5px !important; margin-bottom: 10px !important; }
+        .product-grid-card { padding: 10px !important; }
+        .product-img-box { height: 100px !important; margin-bottom: 10px !important; }
+        .product-name { font-size: 11px !important; height: 32px !important; line-height: 1.3 !important; margin-bottom: 5px !important; }
+        .product-price { font-size: 12.5px !important; }
+        .product-grid-card .badge { font-size: 8px !important; padding: 3px 6px !important; }
+
+        /* FIX INOVASI - DITURUNIN BIAR GAK KETUTUP BANNER */
+        .innovation-section { 
+            margin-top: 10px !important; 
+            padding: 20px 5px 15px !important; 
+            position: relative;
+            z-index: 10;
+        }
+        .innovation-section > .container { 
+            display: flex !important;
+            flex-direction: row !important; 
+            flex-wrap: nowrap !important;
+            justify-content: center !important;
+            align-items: flex-start !important; 
+            gap: 2px !important; 
+            padding: 0 !important;
+        }
+        .innovation-section > .container > .d-flex { 
+            flex-direction: column !important; 
+            align-items: center !important; 
+            text-align: center !important; 
+            width: 33.33% !important; 
+            padding: 0 2px !important; 
+        }
+        .innovation-section img { 
+            width: 26px !important; 
+            height: auto !important;
+            margin-bottom: 6px !important; 
+            display: block !important;
+        }
+        .innovation-section h6 { 
+            font-size: 9.5px !important; 
+            margin-bottom: 2px !important; 
+            white-space: nowrap !important; 
+            font-weight: 800 !important;
+            color: #1e1e1e !important;
+        }
+        .innovation-section small { 
+            font-size: 7.5px !important; 
+            line-height: 1.1 !important; 
+            display: block !important; 
+            color: #6c757d !important;
+        }
+
+        /* FIX KARTU KATEGORI - Swipe Horizontal */
+        .category-section .row {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important; 
+            padding-bottom: 15px;
+            margin: 0 !important;
+            gap: 15px;
+        }
+        .category-section .row::-webkit-scrollbar { display: none; }
+        .category-section .col-md-6, .category-section .col-md-4 {
+            flex: 0 0 85% !important; 
+            max-width: 85% !important;
+            padding: 0 !important;
+        }
+        
+        .cat-card { padding: 20px 15px !important; gap: 10px !important; display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: space-between !important; }
+        .cat-card.big, .cat-card.small { min-height: 130px; }
+        .cat-info { margin: 0 !important; padding: 0 !important; flex: 1; }
+        .cat-info h4, .cat-info h6 { font-size: 15px !important; margin-bottom: 5px; }
+        .cat-info span { font-size: 11px !important; }
+        .cat-card img { max-width: 100px !important; margin: 0 !important; }
+
+        /* Sisa Halaman Lainnya */
+        .utility-bar { padding: 80px 15px 40px; font-size: 12px; flex-direction: column; text-align: center; margin-top: -50px; }
+        .utility-bar .marquee-container { width: 100%; margin: 15px 0 !important; }
+        .promo-section { margin-top: 50px; padding-top: 40px; }
+        .carousel-control-prev, .carousel-control-next { width: 30px !important; height: 30px !important; }
+        .carousel-control-prev i, .carousel-control-next i { font-size: 14px !important; }
+
+        .profile-card-wrapper, .main-content-area { margin-top: 0 !important; }
+        .tier-banner-pink { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 40px !important; }
+        .profile-img-wrapper { position: relative; top: -60px; left: auto; margin-bottom: -40px; }
+        .camera-icon-btn { top: 90px; left: 60%; }
+        .tier-banner-pink > div[style*="margin-left"] { margin-left: 0 !important; padding-right: 0 !important; }
+        .order-status-box { padding: 10px 5px; min-height: 80px; }
+        .order-status-box i { font-size: 1.2rem !important; }
+        .order-status-box span { font-size: 0.6rem !important; text-align: center; display: block; line-height: 1.2; margin-top: 5px; }
+        
+        .img-main-container { height: 280px; }
+        .product-title { font-size: 1.5rem; }
+        .price-tag { font-size: 1.8rem; }
+        
+        #chat-window { width: 90vw; right: 5vw; bottom: 90px; height: 60vh; }
+        #ai-chat-widget { bottom: 15px; right: 15px; }
+    }/* <--- INI ADALAH KURUNG TUTUP YANG BENAR, MENJAGA SEMUANYA TETAP DI DALAM! */
     </style>
     @yield('styles')
 </head>

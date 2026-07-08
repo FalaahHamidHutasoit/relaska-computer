@@ -176,7 +176,7 @@
 
                     <div class="col-md-7">
                          <div class="row text-center gx-2 h-100">
-                            <div class="col-3 position-relative">
+                            <div class="col-6 col-md-3 position-relative mb-3">
                                 <a href="javascript:void(0)" onclick="switchTab('rakitan')" class="order-status-box">
                                     <i class="fas fa-desktop mb-2 fs-5 text-primary"></i> <span style="font-weight: 600;">Rakitan Saya</span>
                                 </a>
@@ -187,7 +187,7 @@
                                 @endif
                             </div>
 
-                            <div class="col-3 position-relative">
+                            <div class="col-6 col-md-3 position-relative mb-3">
                                 <a href="javascript:void(0)" onclick="switchTab('dikemas')" class="order-status-box">
                                     <i class="fas fa-box-open mb-2 fs-5 text-warning"></i>
                                     <span style="font-weight: 600;">Dikemas</span>
@@ -199,7 +199,7 @@
                                 @endif
                             </div>
 
-                            <div class="col-3 position-relative">
+                            <div class="col-6 col-md-3 position-relative mb-3">
                                 <a href="javascript:void(0)" onclick="switchTab('dikirim')" class="order-status-box">
                                     <i class="fas fa-truck mb-2 fs-5 text-info"></i> <span style="font-weight: 600;">Dikirim</span>
                                 </a>
@@ -208,7 +208,7 @@
                                 </span>
                             </div>
 
-                            <div class="col-3 position-relative">
+                            <div class="col-6 col-md-3 position-relative mb-3">
                                 <a href="javascript:void(0)" onclick="switchTab('penilaian')" class="order-status-box">
                                     <i class="fas fa-star mb-2 fs-5 text-success"></i> <span style="font-weight: 600;">Penilaian</span>
                                 </a>
