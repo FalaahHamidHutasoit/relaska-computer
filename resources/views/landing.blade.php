@@ -11,17 +11,17 @@
         --blue: #0d6efd; 
     }
     body { font-family: 'Montserrat', sans-serif; background: white; overflow-x: hidden; }
-    .hero-curve { border-radius: 0 0 50px 50px; overflow: hidden; position: relative; z-index: 10; background: #000; }
+    .hero-curve { border-radius: 0 0 20px 20px; overflow: hidden; position: relative; z-index: 10; background: #000; }
     .carousel-item img { width: 100%; height: auto; object-fit: cover; }
     .carousel-control-prev, .carousel-control-next { width: 45px; height: 45px; background: rgba(30, 30, 30, 0.8); border-radius: 50%; top: 50%; transform: translateY(-50%); opacity: 1; border: 2px solid transparent; transition: 0.3s; }
     .carousel-control-prev { left: 20px; border-color: #f5576c; }
     .carousel-control-next { right: 20px; border-color: #00f2fe; }
-    .innovation-section { background: rgba(245, 247, 247, 1); padding: 55px 0 25px; margin-top: -30px; border-radius: 0 0 50px 50px; position: relative; z-index: 5; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+    .innovation-section { background: rgba(245, 247, 247, 1); padding: 55px 0 25px; margin-top: -30px; border-radius: 0 0 20px 20px; position: relative; z-index: 5; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
     .utility-bar { background: var(--dark); color: white; padding: 100px 0 80px; margin-top: -80px; border-radius: 0; position: relative; z-index: 1; font-size: 15px; }
     .marquee-container { overflow: hidden; white-space: nowrap; }
     .marquee-text { display: inline-block; animation: marquee 20s linear infinite; font-weight: 500; }
     @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-    .category-section { background: white; border-radius: 60px 60px 0 0; margin-top: -60px; position: relative; z-index: 5; padding-top: 60px; }
+    .category-section { background: white; border-radius: 20px 20px 0 0; margin-top: -60px; position: relative; z-index: 5; padding-top: 60px; }
     .cat-card { position: relative; background: #f4f7f7; border-radius: 18px; padding: 45px; height: 100%; display: flex; align-items: center; justify-content: flex-start; gap: 45px; transition: transform 0.4s ease, box-shadow 0.4s ease; cursor: pointer; overflow: hidden; border: none; z-index: 1; }
     .cat-card::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: opacity 0.5s ease; z-index: -1; }
     .cat-card:hover::before { opacity: 1; }
@@ -42,8 +42,8 @@
     /* =========================================
        PRICE TREND RADAR SECTION
        ========================================= */
-    .radar-section { background: #0a1128 url('{{ asset("assets/img/hexagon_bg.png") }}'); background-size: cover; padding: 70px 0 120px; margin-top: 130px; border-radius: 60px 60px 0 0; position: relative; }
-    .radar-section::after { content: ""; position: absolute; bottom: -1px; left: 0; width: 100%; height: 60px; background: white; border-radius: 60px 60px 0 0; }
+    .radar-section { background: #0a1128 url('{{ asset("assets/img/hexagon_bg.png") }}'); background-size: cover; padding: 70px 0 120px; margin-top: 130px; border-radius: 20px 20px 0 0; position: relative; }
+    .radar-section::after { content: ""; position: absolute; bottom: -1px; left: 0; width: 100%; height: 60px; background: white; border-radius: 20px 20px 0 0; }
     .radar-card {
         background: white;
         border-radius: 20px;
@@ -104,7 +104,7 @@
     .brand-section { padding: 40px 0 30px; }
     .brand-container { display: flex; justify-content: center; align-items: center; gap: 50px; flex-wrap: wrap; }
     .brand-item img { height: 42px; transition: 0.3s; }
-    .footer { background: #1e1e1e; color: white; padding: 80px 0 40px; border-radius: 60px 60px 0 0; margin-top: 100px; }
+    .footer { background: #1e1e1e; color: white; padding: 80px 0 40px; border-radius: 20px 20px 0 0; margin-top: 100px; }
     .footer-logo-main { max-height: 80px; margin-bottom: 10px; }
     .footer-brand-text { font-size: 32px; font-weight: 800; letter-spacing: 12px; text-transform: uppercase; margin-bottom: 5px; }
     .footer-brand-subtext { font-size: 14px; letter-spacing: 6px; color: #909090; text-transform: uppercase; margin-bottom: 40px; }
