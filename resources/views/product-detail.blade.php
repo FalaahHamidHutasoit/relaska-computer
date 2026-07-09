@@ -35,6 +35,62 @@
     .similar-store { display: flex; align-items: center; justify-content: space-between; margin-top: auto; border-top: 1px dashed #e2e8f0; padding-top: 10px; }
     .store-info { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; }
     .store-info img { height: 14px; filter: grayscale(100%); opacity: 0.8; }
+
+    /* ======================================================== */
+    /* 📱 RESPONSIVE LAYOUT KHUSUS HP (MOBILE)                  */
+    /* ======================================================== */
+    @media (max-width: 768px) {
+        /* 1. Paksa Utility Bar Turun Bertumpuk */
+        .utility-bar .container {
+            flex-direction: column !important;
+            text-align: center;
+            gap: 12px;
+            padding: 15px !important;
+        }
+        .utility-bar .marquee-container {
+            width: 100% !important;
+            margin: 5px 0 !important;
+        }
+
+        /* 2. Paksa Kategori Bertumpuk Ke Bawah (Vertikal) */
+        .category-section .row {
+            flex-wrap: wrap !important;
+            overflow-x: hidden !important; 
+        }
+        .category-section .col-md-6,
+        .category-section .col-md-4 {
+            flex: 0 0 100% !important; 
+            max-width: 100% !important;
+            margin-bottom: 15px !important;
+        }
+        .cat-card {
+            padding: 25px 20px !important;
+            min-height: auto !important;
+            justify-content: space-between !important;
+        }
+        .cat-card img {
+            max-width: 110px !important;
+            margin-left: 0 !important;
+        }
+        .cat-info { margin-left: 0 !important; }
+        .cat-info h4 { font-size: 18px !important; margin-bottom: 8px !important; }
+        .cat-info h6 { font-size: 16px !important; margin-bottom: 8px !important; }
+        .vga-card .cat-info h6 { font-size: 16px !important; }
+
+        /* 3. Penyesuaian Grid Price Trend Radar (2 Kolom) */
+        .radar-section .row { margin-right: -5px !important; margin-left: -5px !important; }
+        .radar-section .col-md-3 { flex: 0 0 50% !important; max-width: 50% !important; padding-right: 5px !important; padding-left: 5px !important; margin-bottom: 10px !important; }
+        .radar-card { padding: 10px !important; }
+        .radar-img-box { height: 90px !important; padding: 5px !important; margin-bottom: 10px !important; }
+        .radar-card .p-name { font-size: 10.5px !important; height: 30px !important; line-height: 1.3 !important; margin-bottom: 5px !important; }
+        .radar-card .p-price { font-size: 12.5px !important; }
+        .mini-gauge-wrapper { transform: scale(0.55) !important; transform-origin: top center !important; margin-bottom: -35px !important; margin-top: 5px !important; }
+        .radar-card .d-flex.justify-content-between { font-size: 0.55rem !important; margin-top: -5px !important; }
+        .gauge-legend { font-size: 0.5rem !important; flex-wrap: wrap; justify-content: center; gap: 4px; }
+        .radar-card h6 { font-size: 0.75rem !important; }
+        .radar-card small { font-size: 0.6rem !important; }
+        .radar-card .btn { font-size: 9.5px !important; padding: 5px 8px !important; }
+    }
 </style>
 @endsection
 

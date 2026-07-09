@@ -159,7 +159,7 @@
     /* =========================================
        CSS FOOTER PREMIUM RELASKA 
        ========================================= */
-    .footer { background: #1e1e1e; color: white; padding: 80px 0 40px; border-radius: 60px 60px 0 0; margin-top: 100px; }
+    .footer { background: #1e1e1e; color: white; padding: 80px 0 40px; border-radius: 20px 20px 0 0; margin-top: 100px; }
     .footer-logo-main { max-height: 80px; margin-bottom: 10px; }
     .footer-brand-text { font-size: 32px; font-weight: 800; letter-spacing: 12px; text-transform: uppercase; margin-bottom: 5px; }
     .footer-brand-subtext { font-size: 14px; letter-spacing: 6px; color: #909090; text-transform: uppercase; margin-bottom: 40px; }
